@@ -66,16 +66,63 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromClientUI(String message)
   {
-    try
-    {
-      sendToServer(message);
-    }
-    catch(IOException e)
-    {
-      clientUI.display
-        ("Could not send message to server.  Terminating client.");
-      quit();
-    }
+	  String[] command = message.split(" ", 2);
+	  final String[] availableCommands = {
+			  "#quit", 
+			  "#logoff", 
+			  "#sethost", 
+			  "#setport", 
+			  "#login", 
+			  "gethost", 
+			  "getport"};
+
+	  switch(command[0]) 
+	  {
+	  	case "#quit":
+	  		quit();
+	  		break;
+	  	case "#logoff":
+			try {
+				closeConnection();
+			} catch (IOException e1) {}
+	  		break;
+	  	case "#sethost":
+	  		try 
+	  		{
+	  		setHost(command[1].trim());
+	  		}catch(ArrayIndexOutOfBoundsException e) {}
+	  		break;
+	  	case "#setport":
+	  		try {
+		  		setPort(Integer.parseInt(command[1].trim()));
+		  		}catch(ArrayIndexOutOfBoundsException e) {}
+		  	break;
+	  	case "#login":
+	  		try 
+	  		{
+	  			openConnection();
+			} catch (IOException e1) {}
+	  		break;
+	  	case "#gethost":
+	  		clientUI.display(getHost());
+	  		break;
+	  	case "#getport":
+	  		clientUI.display(String.valueOf(getPort()));
+	  		break;
+	  	default:
+	  		try
+	  	    {
+	  	      sendToServer(message);
+	  	    }
+	  	    catch(IOException e)
+	  	    {
+	  	      clientUI.display
+	  	        ("Could not send message to server.  Terminating client.");
+	  	      quit();
+	  	    }
+	  		break;
+	  }
+    
   }
   
   /**
