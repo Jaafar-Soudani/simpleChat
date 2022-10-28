@@ -3,6 +3,8 @@
 // license found at www.lloseng.com 
 package server;
 
+import java.io.IOException;
+
 import common.ChatIF;
 import ocsf.server.*;
 
@@ -138,8 +140,46 @@ public class EchoServer extends AbstractServer
 
 	public void handleMessageFromServerUI(String message) 
 	{
-		serverUI.display(message);
-		sendToAllClients("SERVER MSG> " + message);
+		String[] command = message.split(" ", 2);
+		switch(command[0]) 
+		{
+			case "#quit":
+				try
+				{
+					close();
+				}catch(IOException e) {}
+				System.exit(0);
+				break;
+			case "#stop":
+				stopListening();
+				break;
+			case "#close":
+				try
+				{
+					close();
+				}catch(IOException e) {}
+				break;
+			case "#setport":
+				try {
+			  		setPort(Integer.parseInt(command[1].trim()));
+			  		}catch(ArrayIndexOutOfBoundsException e) {}
+			  	break;
+			case "#start":
+				try
+				{
+					listen();
+				}catch(IOException e) {}
+				break;
+			case "#getport":
+				serverUI.display(String.valueOf(getPort()));
+		  		break;
+			default:
+				serverUI.display(message);
+				sendToAllClients("SERVER MSG> " + message);
+				break;
+		}
+		
+		
 	}
 
 }
