@@ -98,7 +98,6 @@ public class ChatClient extends AbstractClient
   	protected void connectionClosed() 
   	{
   		clientUI.display("Server has stopped connecting");
-  		System.exit(0);
   	}
   	/**
 	 * Hook method called each time an exception is thrown by the client's
@@ -111,8 +110,7 @@ public class ChatClient extends AbstractClient
   @Override
 	protected void connectionException(Exception exception) 
 	{
-		clientUI.display("Server has stopped connecting");
-		System.exit(0);
+		quit();
 	}
   
 }
