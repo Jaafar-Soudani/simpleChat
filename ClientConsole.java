@@ -104,7 +104,7 @@ public class ClientConsole implements ChatIF
    */
   public void display(String message) 
   {
-    System.out.println("> " + message);
+    System.out.println( message);
   }
 
   
@@ -132,7 +132,7 @@ public class ClientConsole implements ChatIF
     try 
     {
     	port = Integer.parseInt(args[1]);
-    }catch(ArrayIndexOutOfBoundsException e) 
+    }catch(Exception e) 
     {
     	port = DEFAULT_PORT;
     }

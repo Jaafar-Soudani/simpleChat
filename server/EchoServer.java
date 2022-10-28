@@ -1,8 +1,9 @@
 // This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
+package server;
 
-
+import common.ChatIF;
 import ocsf.server.*;
 
 /**
@@ -22,6 +23,14 @@ public class EchoServer extends AbstractServer
   /**
    * The default port to listen on.
    */
+	
+	//Instance variables **********************************************
+	  
+	  /**
+	   * The interface type variable.  It allows the implementation of 
+	   * the display method in the client.
+	   */
+	  ChatIF serverUI; 
   final public static int DEFAULT_PORT = 5555;
   
   //Constructors ****************************************************
@@ -31,9 +40,11 @@ public class EchoServer extends AbstractServer
    *
    * @param port The port number to connect on.
    */
-  public EchoServer(int port) 
+  public EchoServer(int port, ChatIF serverUI) 
   {
     super(port);
+    this.serverUI = serverUI; 
+    
   }
 
   
@@ -48,7 +59,7 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-    System.out.println("Message received: " + msg + " from " + client);
+    serverUI.display("Message received: " + msg + " from " + client);
     this.sendToAllClients(msg);
   }
     
@@ -58,7 +69,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
-    System.out.println
+    serverUI.display
       ("Server listening for connections on port " + getPort());
   }
   
@@ -68,7 +79,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStopped()
   {
-    System.out.println
+    serverUI.display
       ("Server has stopped listening for connections.");
   }
   
@@ -81,7 +92,9 @@ public class EchoServer extends AbstractServer
    * @param args[0] The port number to listen on.  Defaults to 5555 
    *          if no argument is entered.
    */
-  public static void main(String[] args) 
+  
+  /*  
+	public static void main(String[] args) 
   {
     int port = 0; //Port to listen on
 
@@ -105,7 +118,7 @@ public class EchoServer extends AbstractServer
       System.out.println("ERROR - Could not listen for clients!");
     }
   }
-  
+  */
   /**
    * Hook method called each time a new client connection is
    * accepted. The default implementation does nothing.
@@ -113,13 +126,21 @@ public class EchoServer extends AbstractServer
    */
   protected void clientConnected(ConnectionToClient client) 
   {
-	  System.out.println("Client connected " + client.getInetAddress());
+	  serverUI.display("Client connected " + client.getInetAddress());
   }
   
   synchronized protected void clientException( ConnectionToClient client, Throwable exception) 
   {
-	  System.out.println("Client disconnected " + client.getInetAddress());
+	 serverUI.display("Client disconnected " + client.getInetAddress());
   }
+
+
+
+	public void handleMessageFromServerUI(String message) 
+	{
+		serverUI.display(message);
+		sendToAllClients("SERVER MSG> " + message);
+	}
 
 }
 //End of EchoServer class

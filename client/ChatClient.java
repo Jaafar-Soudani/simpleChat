@@ -56,7 +56,7 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-    clientUI.display(msg.toString());
+    clientUI.display("> " + msg.toString());
   }
 
   /**
@@ -67,14 +67,6 @@ public class ChatClient extends AbstractClient
   public void handleMessageFromClientUI(String message)
   {
 	  String[] command = message.split(" ", 2);
-	  final String[] availableCommands = {
-			  "#quit", 
-			  "#logoff", 
-			  "#sethost", 
-			  "#setport", 
-			  "#login", 
-			  "gethost", 
-			  "getport"};
 
 	  switch(command[0]) 
 	  {
