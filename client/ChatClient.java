@@ -87,6 +87,7 @@ public class ChatClient extends AbstractClient
 	  	case "#logoff":
 			try {
 				closeConnection();
+				System.out.println("Connection closed");	
 			} catch (IOException e1) {}
 	  		break;
 	  	case "#sethost":
@@ -153,7 +154,7 @@ public class ChatClient extends AbstractClient
   @Override
   	protected void connectionClosed() 
   	{
-  		clientUI.display("Server has stopped connecting");
+  		//clientUI.display("The server has shut down.");
   	}
   	/**
 	 * Hook method called each time an exception is thrown by the client's
@@ -166,6 +167,7 @@ public class ChatClient extends AbstractClient
   @Override
 	protected void connectionException(Exception exception) 
 	{
+	  clientUI.display("The server has shut down");
 		quit();
 	}
   /**

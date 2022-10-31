@@ -92,21 +92,12 @@ public class ServerConsole implements ChatIF
 	   */
 	  public static void main(String[] args) 
 	  {
-	    String host = "";
 	    int port = DEFAULT_PORT;
 
-	    try
-	    {
-	      host = args[0];
-	    }
-	    catch(ArrayIndexOutOfBoundsException e)
-	    {
-	      host = "localhost";
-	    }
 	    
 	    try 
 	    {
-	    	port = Integer.parseInt(args[1]);
+	    	port = Integer.parseInt(args[0]);
 	    }catch(Exception e) 
 	    {
 	    	port = DEFAULT_PORT;

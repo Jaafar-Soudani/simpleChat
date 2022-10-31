@@ -61,13 +61,18 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
+	  serverUI.display("Message received: " + msg + " from " + client);
+
 	  String[] message = msg.toString().split(" ", 2);
 	  switch(message[0]) 
 	  { 
 	  	case "#login":
 	  		if(client.getInfo("loginId") == null) 
 	  		{
-	  			client.setInfo("loginId", message[1].trim());
+	  			String id = message[1].trim();
+	  			client.setInfo("loginId", id);
+	  			serverUI.display(id + " has logged on");
+	  			this.sendToAllClients(id + " has logged on");
 	  		}else 
 	  		{
 	  			try 
@@ -79,7 +84,6 @@ public class EchoServer extends AbstractServer
 	  		break;
 	  		
 	  	default:
-	  		 serverUI.display("Message received: " + msg + " from " + client);
 	  	    this.sendToAllClients(client.getInfo("loginId") + ": " +  msg);
 	  }
    
@@ -148,9 +152,13 @@ public class EchoServer extends AbstractServer
    */
   protected void clientConnected(ConnectionToClient client) 
   {
-	  serverUI.display("Client connected " + client.getInetAddress());
+	  serverUI.display("A new client has connected to the server.");
   }
   
+  synchronized protected void clientDisconnected(ConnectionToClient client) 
+  {
+	  serverUI.display(client.getInfo("loginId").toString() + " has disconnected");
+  }
   synchronized protected void clientException( ConnectionToClient client, Throwable exception) 
   {
 	 serverUI.display("Client disconnected " + client.getInetAddress());
