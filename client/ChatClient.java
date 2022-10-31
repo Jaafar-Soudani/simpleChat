@@ -26,6 +26,11 @@ public class ChatClient extends AbstractClient
    * the display method in the client.
    */
   ChatIF clientUI; 
+  
+  /*
+   * Variable to hold the login ID
+   */
+  String loginId;
 
   
   //Constructors ****************************************************
@@ -44,6 +49,12 @@ public class ChatClient extends AbstractClient
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
     openConnection();
+  }
+  
+  //setter
+  public void SetLoginID(String id) 
+  {
+	  loginId = id;
   }
 
   
@@ -151,6 +162,17 @@ public class ChatClient extends AbstractClient
 	{
 		quit();
 	}
-  
+  /**
+	 * Hook method called after a connection has been established. The default
+	 * implementation does nothing. It may be overridden by subclasses to do
+	 * anything they wish.
+	 */
+  @Override
+	protected void connectionEstablished() {
+	  try
+	  {
+		  sendToServer("#login " + loginId);
+	  }catch(IOException e) {};
+	}
 }
 //End of ChatClient class
