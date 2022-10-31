@@ -61,8 +61,28 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-    serverUI.display("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+	  String[] message = msg.toString().split(" ", 2);
+	  switch(message[0]) 
+	  { 
+	  	case "#login":
+	  		if(client.getInfo("loginId") == null) 
+	  		{
+	  			client.setInfo("loginId", message[1].trim());
+	  		}else 
+	  		{
+	  			try 
+	  			{
+		  			client.sendToClient("Cannot log in already logged in user, terminating connection");
+		  			client.close();
+	  			}catch(IOException e) {}
+	  		}
+	  		break;
+	  		
+	  	default:
+	  		 serverUI.display("Message received: " + msg + " from " + client);
+	  	    this.sendToAllClients(client.getInfo("loginId") + ": " +  msg);
+	  }
+   
   }
     
   /**
@@ -174,8 +194,15 @@ public class EchoServer extends AbstractServer
 				serverUI.display(String.valueOf(getPort()));
 		  		break;
 			default:
-				serverUI.display(message);
-				sendToAllClients("SERVER MSG> " + message);
+				if(message.charAt(0) == '#') 
+		  		{
+		  			System.out.println("Unknown command");
+		  		}
+				else 
+				{	
+		  			serverUI.display(message);
+		  			sendToAllClients("SERVER MSG> " + message);
+				}
 				break;
 		}
 		

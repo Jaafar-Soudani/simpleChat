@@ -113,16 +113,22 @@ public class ChatClient extends AbstractClient
 	  		clientUI.display(String.valueOf(getPort()));
 	  		break;
 	  	default:
-	  		try
-	  	    {
-	  	      sendToServer(message);
-	  	    }
-	  	    catch(IOException e)
-	  	    {
-	  	      clientUI.display
-	  	        ("Could not send message to server.  Terminating client.");
-	  	      quit();
-	  	    }
+	  		if(message.charAt(0) == '#') 
+	  		{
+	  			System.out.println("Unknown command");
+	  		}else
+	  		{
+	  			try
+		  	    {
+		  	      sendToServer(message);
+		  	    }
+		  	    catch(IOException e)
+		  	    {
+		  	      clientUI.display
+		  	        ("Could not send message to server.  Terminating client.");
+		  	      quit();
+		  	    }
+	  		}
 	  		break;
 	  }
     
