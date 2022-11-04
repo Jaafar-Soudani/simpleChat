@@ -61,9 +61,10 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-	  serverUI.display("Message received: " + msg + " from " + client);
+	  serverUI.display("Message received: " + msg + " from " + client.getInfo("loginId"));
 
 	  String[] message = msg.toString().split(" ", 2);
+	 
 	  switch(message[0]) 
 	  { 
 	  	case "#login":
